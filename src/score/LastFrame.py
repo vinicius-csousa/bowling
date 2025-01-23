@@ -1,14 +1,14 @@
 from score.Frame import Frame
-from score.FrameStatus import FrameStatus
+from score.enums.FrameStatus import FrameStatus
 
 class LastFrame(Frame):
     def has_ended(self) -> bool:
-        number_of_rolls = len(self.rolls)
-        return number_of_rolls == 3 or (number_of_rolls == 2 and self.score < 10)
+        return len(self.rolls) == 3 or (len(self.rolls) == 2 and self.score < 10)
     
     def wrap_it_up(self) -> int:
         bonus = self.calculate_last_frame_bonus()
-        self.bonus += bonus
+        self.bonus = bonus
+        self.score -= bonus
 
         if self.status == FrameStatus.STRIKE:
             del self.rolls[-2:]
@@ -17,8 +17,8 @@ class LastFrame(Frame):
         
         return bonus
         
-    def calculate_last_frame_bonus(self):
+    def calculate_last_frame_bonus(self) -> None:
         if self.status == FrameStatus.STRIKE or self.status == FrameStatus.SPARE:
             return self.score - 10
-        else:
-            return 0
+        
+        return 0

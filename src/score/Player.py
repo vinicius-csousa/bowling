@@ -1,26 +1,32 @@
 from score.Scorable import Scorable
 from score.Frame import Frame
 from score.LastFrame import LastFrame
+from score.enums.FrameStatus import FrameStatus
+from score.enums.GameStatus import GameStatus
 
 class Player(Scorable):
-    def __init__(self):
+    def __init__(self, name: str):
+        self.name = name
         self.frames: list[Frame] = []
         self.current_frame = Frame()
-        self.score = 0
+        self.bonus_list: list[dict[str, int]] = []
+        self.game_status: GameStatus = GameStatus.ONGOING
 
     def calculate_score(self) -> int:
-        return self.score
+        return sum([frame.calculate_score() for frame in self.frames])
     
-    def play(self, pins: int) -> None:
-        self.current_frame.add_roll(pins)
-        self.score += pins
-        self.current_frame.set_status()
+    def play(self, pins: int) -> bool:
+        self.current_frame.play(pins)
+        self.add_bonus(pins)
         
         if self.current_frame.has_ended():
-            self.update_frame()
+            self.end_frame()
+            return True
+        
+        return False
 
-    def update_frame(self) -> None:
-        self.add_bonus()
+    def end_frame(self) -> None:
+        self.add_to_bonus_list(self.current_frame.status)
         self.frames.append(self.current_frame)
 
         number_of_frames = len(self.frames)
@@ -29,25 +35,36 @@ class Player(Scorable):
         elif number_of_frames == 9:
             self.current_frame = LastFrame()
         elif number_of_frames == 10:
-            self.score += self.current_frame.wrap_it_up()
+            self.current_frame.wrap_it_up()
+            self.set_game_status()
         else:
             return
-
-    def add_bonus(self) -> None:
-        if not self.frames:
+    
+    def add_to_bonus_list(self, status) -> None:
+        if len(self.frames) == 10:
             return
-        
-        bonus = self.calculate_bonus()
-        self.frames[len(self.frames) - 1].add_bonus(bonus)
-        self.score += bonus
 
-    def calculate_bonus(self) -> int:
-        number_of_frames = len(self.frames)
-        if number_of_frames > 9:
-            return 0
+        bonus_rolls = 2 if status == FrameStatus.STRIKE else 1 if status == FrameStatus.SPARE else 0
+        if bonus_rolls > 0:
+              self.bonus_list.append({"frame_index": len(self.frames), "bonus_rolls": bonus_rolls})
 
-        previous_frame_status = self.frames[number_of_frames- 1].get_status()
-        return self.current_frame.calculate_bonus(previous_frame_status)
+    def add_bonus(self, pins: int) -> None:
+        self.bonus_list = [
+            {**element, "bonus_rolls": element["bonus_rolls"] - 1}
+            for element in self.bonus_list
+            if self.frames[element["frame_index"]].add_bonus(pins) or element["bonus_rolls"] > 1
+    ]
 
-    def get_frames(self):
+    def set_game_status(self) -> None:
+        score = self.calculate_score()
+        if score == 300:
+            self.game_status = GameStatus.PERFECT_GAME
+        elif score == 0:
+            self.game_status = GameStatus.GUTTER_GAME
+        else:
+            self.game_status = GameStatus.FINISHED
+
+    def get_frames(self) -> list[Frame]:
+        if len(self.frames) < 10 and len(self.current_frame.rolls) == 1:
+            return self.frames + [self.current_frame]
         return self.frames
