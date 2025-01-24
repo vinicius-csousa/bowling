@@ -1,6 +1,6 @@
-from score.Scorable import Scorable
-from score.Roll import Roll
-from score.enums.FrameStatus import FrameStatus
+from src.score.Scorable import Scorable
+from src.score.Roll import Roll
+from src.score.enums.FrameStatus import FrameStatus
 
 class Frame(Scorable):
     def __init__(self):

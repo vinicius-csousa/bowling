@@ -1,8 +1,8 @@
-from score.Scorable import Scorable
-from score.Frame import Frame
-from score.LastFrame import LastFrame
-from score.enums.FrameStatus import FrameStatus
-from score.enums.GameStatus import GameStatus
+from src.score.Scorable import Scorable
+from src.score.Frame import Frame
+from src.score.LastFrame import LastFrame
+from src.score.enums.FrameStatus import FrameStatus
+from src.score.enums.GameStatus import GameStatus
 
 class Player(Scorable):
     def __init__(self, name: str):

@@ -1,5 +1,5 @@
-from score.Player import Player
-from score.enums.GameStatus import GameStatus
+from src.score.Player import Player
+from src.score.enums.GameStatus import GameStatus
 
 class BowlingManager():
     def __init__(self, players: list[Player]):

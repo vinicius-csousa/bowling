@@ -1,5 +1,5 @@
-from score.Frame import Frame
-from score.enums.FrameStatus import FrameStatus
+from src.score.Frame import Frame
+from src.score.enums.FrameStatus import FrameStatus
 
 class LastFrame(Frame):
     def has_ended(self) -> bool:

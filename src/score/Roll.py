@@ -1,4 +1,4 @@
-from score.Scorable import Scorable
+from src.score.Scorable import Scorable
 
 class Roll(Scorable):
     def __init__(self, pins: int):
