@@ -19,7 +19,7 @@ The struture of the repository is detailed below:
 ```plaintext
 - /src/game: the bowling game CLI application for testing the scoreboard solution
 - /src/helpers: helper functions to get user inputs and print results
-- /src/score: the actual implementation of the solution to the coding challenge (bowling scoreboard)
+- /src/score: the actual implementation of the bowling scoreboard
 - /tests: tests to assert the correctness of the solution.
 ```
 

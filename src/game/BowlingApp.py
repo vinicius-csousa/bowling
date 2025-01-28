@@ -26,7 +26,7 @@ class BowlingApp:
         and displays the final results.
         """
         self.__clear_screen()
-        print("Welcome to Danske Commodities Bowling!\n")
+        print("Welcome to the Bowling CLI Game!\n")
         self.__initialize_game()
         self.__game_loop()
         self.__show_final_results()
