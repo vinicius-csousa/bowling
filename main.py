@@ -1,7 +1,5 @@
-from src.game.Game import Game
-from src.game.Renderer import Renderer
-from src.score.BowlingManager import BowlingManager
+from src.game.BowlingApp import BowlingApp
 
-game = Game((720, 720))
-game.run()
-
+# Starting the game
+bowling = BowlingApp()
+bowling.run()

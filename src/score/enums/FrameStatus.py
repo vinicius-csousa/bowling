@@ -1,6 +1,13 @@
 from enum import Enum
 
+
 class FrameStatus(Enum):
-    NORMAL = 'normal'
-    STRIKE = 'strike'
-    SPARE = 'spare'
+    """
+    An Enum for representing the possible frame statuses in a
+    bowling game.
+    """
+
+    ONGOING = "ongoing"
+    FINISHED = "finished"
+    STRIKE = "strike"
+    SPARE = "spare"
